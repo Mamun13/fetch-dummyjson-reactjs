@@ -10,13 +10,14 @@ import Data from './Data'
 
 
 const Axios = () => {
+  const [filterImage, setFilterImage] = useState([]);
 	const [image, setImage] = useState([]);
 
-
-  const getdata=async()=>{
+  const getdata = async() =>{
     const res = await fetch('https://dummyjson.com/products');
     const Data = await res.json();
-    setImage(Data);
+    setImage(Data.products);
+    setFilterImage(Data.products);
   }
  
   useEffect(() => {
@@ -24,10 +25,10 @@ const Axios = () => {
   },[])
   
   const filterItem = (brandlist) => {
-    const updatedcard = image.products.filter((curElem)=>{
+    const updatedcard = image.filter((curElem)=>{
       return curElem.brand === brandlist;
     });
-    setImage(updatedcard);
+    setFilterImage(updatedcard);
   }
 
 	return (
@@ -36,7 +37,7 @@ const Axios = () => {
         <Row>
           <ul className='mt-5 d-flex justify-content-center list-unstyled'>
             <li>
-              <button className="text-capitalize me-2 btn btn-success">all</button>
+              <button className="text-capitalize me-2 btn btn-success" onClick={() => setFilterImage(image)}>all</button>
               <button className="text-capitalize me-2 btn btn-success" onClick={() => filterItem('Apple')}>iphone</button>
               <button className="text-capitalize me-2 btn btn-success" onClick={() => filterItem('OPPO')}>oppo</button>
               <button className="text-capitalize me-2 btn btn-success" onClick={() => filterItem('Huawei')}>Huawei</button>
@@ -44,7 +45,7 @@ const Axios = () => {
             </li>
           </ul>
           {/* dummyObject?.products?.[0]?.['title'] = 'iPhone 9' */}
-            {image?.products?.map((curElm,index)=>{
+            {filterImage?.map((curElm,index)=>{
               return(
                   <Col lg={3} key={index}>
                     <Card className='mt-4 rounded-0'>
